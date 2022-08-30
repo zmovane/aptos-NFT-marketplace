@@ -129,8 +129,10 @@ module Dollars1200PerHour::market{
         exchange_coin_for_token<CoinType>(buyer, price, signer::address_of(&resource_signer), token_id, 1);
         
         let royalty = token::get_royalty(token_id);
-        let royalty_fee = price * token::get_royalty_numerator(&royalty) / token::get_royalty_denominator(&royalty);        
-        let amount = price - royalty_fee;
+        let royalty_fee = price * token::get_royalty_numerator(&royalty) / token::get_royalty_denominator(&royalty);
+        let market = borrow_global<Market>(market_address);
+        let market_fee = price * market.fee_numerator / FEE_DENOMINATOR;
+        let amount = price - royalty_fee - market_fee;
         let coins = coin::withdraw<CoinType>(&resource_signer, amount);
         coin::deposit<CoinType>(token_owner, coins);
         table::remove(&mut listed_items.items, token_id);
