@@ -1,4 +1,10 @@
 {
   "private": true,
-  "workspaces":["market-frontend", "market-contracts"]
+  "workspaces": [
+    "market-frontend",
+    "market-contracts"
+  ],
+  "dependencies": {
+    "ts-node": "^10.9.1"
+  }
 }

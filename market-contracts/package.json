@@ -1,8 +1,8 @@
 {
   "name": "market-contracts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
-    "compile": "aptos move compile --package-dir . --named-addresses $NAME=$ADDRESS",
-    "publish": "aptos move publish --package-dir . --named-addresses $NAME=$ADDRESS"
+    "move:compile": "aptos move compile --package-dir . --named-addresses $NAME=$ADDRESS",
+    "move:publish": "aptos move publish --package-dir . --named-addresses $NAME=$ADDRESS"
   }
 }
