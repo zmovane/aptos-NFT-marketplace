@@ -8,7 +8,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "@martiandao/aptos-web3-bip44.js": "^1.1.20",
+    "@types/mime": "^3.0.1",
+    "axios": "^0.27.2",
+    "daisyui": "^2.24.0",
+    "mime": "^3.0.0",
+    "mongodb": "^4.9.0",
     "next": "latest",
+    "nft.storage": "^7.0.0",
     "react": "18.1.0",
     "react-dom": "18.1.0"
   },
