@@ -65,7 +65,7 @@ module Dollars1200PerHour::market{
         account::create_signer_with_capability(&market.signer_cap)
     }
 
-    public fun create_market<CoinType>(sender: &signer, market_name: String, fee_numerator: u64, fee_payee: address) acquires MarketEvents, Market {        
+    public entry fun create_market<CoinType>(sender: &signer, market_name: String, fee_numerator: u64, fee_payee: address) acquires MarketEvents, Market {        
         let sender_addr = signer::address_of(sender);
         let market_id = MarketId { market_name, market_address: sender_addr };
         if(!exists<MarketEvents>(sender_addr)){
@@ -95,7 +95,7 @@ module Dollars1200PerHour::market{
         };
     }
 
-    public fun list_token<CoinType>(market_address:address, market_name: String, token_owner: &signer, creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems {
+    public entry fun list_token<CoinType>(market_address:address, market_name: String, token_owner: &signer, creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems {
         let market_id = MarketId { market_name, market_address };
         let resource_signer = get_resource_account_cap(market_address);
         let token_owner_addr = signer::address_of(token_owner);
@@ -116,7 +116,7 @@ module Dollars1200PerHour::market{
         });
     } 
 
-    public fun buy_token<CoinType>(market_address: address, market_name: String, buyer: &signer, creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems{
+    public entry fun buy_token<CoinType>(market_address: address, market_name: String, buyer: &signer, creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems{
         let market_id = MarketId { market_name, market_address };
         let token_id = token::create_token_id_raw(creator, collection, name, property_version);
         let listed_items = borrow_global_mut<ListedItems>(market_address);
