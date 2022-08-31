@@ -1,4 +1,4 @@
-module Dollars1200PerHour::market{
+module _1200_dollars_per_hour::marketplace{
     use std::signer;
     use std::string::String;
     use aptos_framework::coin;
@@ -95,7 +95,7 @@ module Dollars1200PerHour::market{
         };
     }
 
-    public entry fun list_token<CoinType>(market_address:address, market_name: String, token_owner: &signer, creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems {
+    public entry fun list_token<CoinType>(token_owner: &signer, market_address:address, market_name: String, creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems {
         let market_id = MarketId { market_name, market_address };
         let resource_signer = get_resource_account_cap(market_address);
         let token_owner_addr = signer::address_of(token_owner);
@@ -116,7 +116,7 @@ module Dollars1200PerHour::market{
         });
     } 
 
-    public entry fun buy_token<CoinType>(market_address: address, market_name: String, buyer: &signer, creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems{
+    public entry fun buy_token<CoinType>(buyer: &signer, market_address: address, market_name: String,creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems{
         let market_id = MarketId { market_name, market_address };
         let token_id = token::create_token_id_raw(creator, collection, name, property_version);
         let listed_items = borrow_global_mut<ListedItems>(market_address);

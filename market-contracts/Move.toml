@@ -1,10 +1,10 @@
 [package]
-name = "Dollars1200PerHour"
-version = "0.1.0"
+name = "_1200_dollars_per_hour"
+version = "0.1.2"
 license = "MIT"
 
 [addresses]
-Dollars1200PerHour ="_"
+_1200_dollars_per_hour ="_"
 std="0x1"
 aptos_framework="0x1"
 aptos_std="0x1"

@@ -4,14 +4,14 @@ import {
   HexString,
 } from "@martiandao/aptos-web3-bip44.js";
 import * as env from "dotenv";
-env.config();
+env.config({ path: `.env.${process.env.NODE_ENV}` });
 
 const feeNumerator = 10;
 const {
   APTOS_NODE_URL: aptosNodeURL,
   APTOS_FAUCET_URL: aptosFaucetURL,
   WALLET_PRIVATE_KEY: walletPrivateKey,
-  MARKET_NAME: marketName,
+  NFT_MARKET_NAME: marketName,
 } = process.env;
 
 async function main() {
@@ -20,8 +20,7 @@ async function main() {
     HexString.ensure(walletPrivateKey).toUint8Array()
   );
   const payload = {
-    type: "script_function_payload",
-    function: `${account.address()}::market::create_market`,
+    function: `${account.address()}::marketplace::create_market`,
     type_arguments: ["0x1::aptos_coin::AptosCoin"],
     arguments: [marketName, feeNumerator, `${account.address()}`],
   };
