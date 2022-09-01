@@ -22,13 +22,14 @@ async function main() {
   const payload = {
     function: `${account.address()}::marketplace::create_market`,
     type_arguments: ["0x1::aptos_coin::AptosCoin"],
-    arguments: [marketName, feeNumerator, `${account.address()}`],
+    arguments: [marketName, feeNumerator, `${account.address()}`, 10000],
   };
   const transaction = await client.aptosClient.generateTransaction(
     account.address(),
     payload
   );
-  await client.signAndSubmitTransaction(account, transaction);
+  const tx = await client.signAndSubmitTransaction(account, transaction);
+  console.log(tx);
 }
 
 main()

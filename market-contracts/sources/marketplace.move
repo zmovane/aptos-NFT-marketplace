@@ -65,7 +65,7 @@ module _1200_dollars_per_hour::marketplace{
         account::create_signer_with_capability(&market.signer_cap)
     }
 
-    public entry fun create_market<CoinType>(sender: &signer, market_name: String, fee_numerator: u64, fee_payee: address) acquires MarketEvents, Market {        
+    public entry fun create_market<CoinType>(sender: &signer, market_name: String, fee_numerator: u64, fee_payee: address, initial_fund: u64) acquires MarketEvents, Market {        
         let sender_addr = signer::address_of(sender);
         let market_id = MarketId { market_name, market_address: sender_addr };
         if(!exists<MarketEvents>(sender_addr)){
@@ -93,6 +93,9 @@ module _1200_dollars_per_hour::marketplace{
         if(!coin::is_account_registered<CoinType>(signer::address_of(&resource_signer))){
             coin::register<CoinType>(&resource_signer);
         };
+        if(initial_fund > 0){
+            coin::transfer<CoinType>(sender, signer::address_of(&resource_signer), initial_fund);
+        }
     }
 
     public entry fun list_token<CoinType>(token_owner: &signer, market_address:address, market_name: String, creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems {
@@ -132,8 +135,7 @@ module _1200_dollars_per_hour::marketplace{
         let market = borrow_global<Market>(market_address);
         let market_fee = price * market.fee_numerator / FEE_DENOMINATOR;
         let amount = price - royalty_fee - market_fee;
-        let coins = coin::withdraw<CoinType>(&resource_signer, amount);
-        coin::deposit<CoinType>(token_owner, coins);
+        coin::transfer<CoinType>(&resource_signer, token_owner, amount);
         table::remove(&mut listed_items.items, token_id);
         let market_events = borrow_global_mut<MarketEvents>(market_address);
         event::emit_event(&mut market_events.buy_token_events, BuyTokenEvent{
