@@ -1,11 +1,12 @@
 import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/router";
-import { uploadNFT } from "../utils/nftstorage";
-import { useAptosWallet } from "../hooks/useAptos";
+import { NFTStorageClient } from "../utils/nftstorage";
+import { useWallet } from "../hooks/useAptos";
 
 export default function Mint() {
+  const client = new NFTStorageClient(process.env.NFT_STORAGE_KEY!);
   const router = useRouter();
-  const address = useAptosWallet();
+  const { address } = useWallet();
   const [base64image, setBase64image] = useState("");
   const [formInput, updateFormInput] = useState<{
     name: string;
@@ -31,21 +32,28 @@ export default function Mint() {
     const { name, description, file } = formInput;
     if (!address || !name || !description || !file) return;
     try {
-      const token = await uploadNFT(file, name, description);
-      const collname = "collName" + new Date().getMilliseconds();
+      const token = await client.upload(file, name, description);
+      const image = await client.getImageURL(token.url);
+
+      const collName = "collName" + new Date().getMilliseconds();
+      const collDescription = "Demo NFT Collection";
+      const collUri = "https://aptos.dev";
+
       await (window as any).martian.createCollection(
-        collname,
-        "Demo NFT Collection",
-        "https://aptos.dev"
+        collName,
+        collDescription,
+        collUri
       );
       await (window as any).martian.createToken(
-        collname,
+        collName,
         name,
         description,
         1,
-        token.url
+        image,
+        address
       );
-      router.push("/aptos-market/dashboard");
+
+      router.push("/dashboard");
     } catch (error) {
       console.log("Error create NFT: ", error);
     }

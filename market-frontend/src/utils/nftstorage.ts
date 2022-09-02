@@ -2,32 +2,38 @@ import { NFTStorage } from "nft.storage";
 import * as fs from "fs/promises";
 import mime from "mime";
 import path from "path";
+import axios from "axios";
 
-const nftStorageClient = new NFTStorage({
-  token: process.env.NFT_STORAGE_KEY!,
-});
+export class NFTStorageClient {
+  private nftStorage: NFTStorage;
+  constructor(token: string) {
+    this.nftStorage = new NFTStorage({ token });
+  }
 
-export function setIPFSGateway(ipfsURl: string) {
-  if (ipfsURl.startsWith("ipfs:"))
-    return (
-      "https://nftstorage.link/ipfs/" +
-      new URL(ipfsURl).pathname.replace(/^\/\//, "")
-    );
-  return ipfsURl;
-}
+  private async fileFromPath(file: string | File) {
+    if (file instanceof File) return file;
+    const content = await fs.readFile(file);
+    const type = mime.getType(file)!;
+    return new File([content], path.basename(file), { type });
+  }
 
-export async function uploadNFT(
-  file: string | File,
-  name: string,
-  description: string
-) {
-  const image = await fileFromPath(file);
-  return await nftStorageClient.store({ image, name, description });
-}
+  private convertGatewayURL(ipfsURL: string) {
+    if (ipfsURL.startsWith("ipfs:"))
+      return (
+        "https://nftstorage.link/ipfs/" +
+        new URL(ipfsURL).pathname.replace(/^\/\//, "")
+      );
+    return ipfsURL;
+  }
 
-async function fileFromPath(file: string | File) {
-  if (file instanceof File) return file;
-  const content = await fs.readFile(file);
-  const type = mime.getType(file)!;
-  return new File([content], path.basename(file), { type });
+  async upload(file: string | File, name: string, description: string) {
+    const image = await this.fileFromPath(file);
+    return await this.nftStorage.store({ image, name, description });
+  }
+
+  async getImageURL(tokenURL: string) {
+    let gatewayURL = this.convertGatewayURL(tokenURL);
+    let image = (await axios.get(gatewayURL)).data.image;
+    return this.convertGatewayURL(image);
+  }
 }
