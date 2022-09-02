@@ -9,7 +9,7 @@ export function Card({ data, onClick, type }: CardProps) {
     <div className="card card-compact bg-base-100 shadow-xl">
       <Image
         className="bg-neutral-200"
-        src={data.image}
+        src={data.uri}
         height={500}
         width={500}
         objectFit="cover"
@@ -18,9 +18,9 @@ export function Card({ data, onClick, type }: CardProps) {
       <div className="card-body">
         <h2 className="card-title">{data.name}</h2>
         <p>{data.description}</p>
-        {type != "noraml" || (
+        {type == "withBuyBtn" && (
           <div className="justify-start text-pink-400 font-bold">
-            {data.price} ETH
+            {data.price} APT
           </div>
         )}
         {type != "noraml" && (
