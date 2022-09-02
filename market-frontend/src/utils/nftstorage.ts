@@ -3,6 +3,7 @@ import * as fs from "fs/promises";
 import mime from "mime";
 import path from "path";
 import axios from "axios";
+import { NFT_STORAGE_KEY } from "../config/constants";
 
 export class NFTStorageClient {
   private nftStorage: NFTStorage;
@@ -37,3 +38,5 @@ export class NFTStorageClient {
     return this.convertGatewayURL(image);
   }
 }
+
+export const nftStorage = new NFTStorageClient(NFT_STORAGE_KEY!);

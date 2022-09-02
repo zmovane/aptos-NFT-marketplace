@@ -1,0 +1,6 @@
+export const NFT_STORAGE_KEY = process.env.NEXT_PUBLIC_NFT_STORAGE_KEY;
+export const NFT_MARKET_NAME = process.env.NEXT_PUBLIC_NFT_MARKET_NAME;
+export const NFT_MARKET_ADDRESS = process.env.NEXT_PUBLIC_NFT_MARKET_ADDRESS;
+
+export const APTOS_NODE_URL = process.env.NEXT_PUBLIC_APTOS_NODE_URL;
+export const APTOS_FAUCET_URL = process.env.NEXT_PUBLIC_APTOS_FAUCET_URL;

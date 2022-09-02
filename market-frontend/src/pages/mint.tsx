@@ -1,10 +1,9 @@
 import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/router";
-import { NFTStorageClient } from "../utils/nftstorage";
+import { nftStorage } from "../utils/nftstorage";
 import { useWallet } from "../hooks/useAptos";
 
 export default function Mint() {
-  const client = new NFTStorageClient(process.env.NFT_STORAGE_KEY!);
   const router = useRouter();
   const { address } = useWallet();
   const [base64image, setBase64image] = useState("");
@@ -32,8 +31,8 @@ export default function Mint() {
     const { name, description, file } = formInput;
     if (!address || !name || !description || !file) return;
     try {
-      const token = await client.upload(file, name, description);
-      const image = await client.getImageURL(token.url);
+      const token = await nftStorage.upload(file, name, description);
+      const image = await nftStorage.getImageURL(token.url);
 
       const collName = "collName" + new Date().getMilliseconds();
       const collDescription = "Demo NFT Collection";

@@ -4,14 +4,14 @@ import {
   HexString,
 } from "@martiandao/aptos-web3-bip44.js";
 import * as env from "dotenv";
-env.config({ path: `.env.${process.env.NODE_ENV}` });
+env.config({ path: `.env.${process.env.NODE_ENV}`.local });
 
 const feeNumerator = 10;
 const {
-  APTOS_NODE_URL: aptosNodeURL,
-  APTOS_FAUCET_URL: aptosFaucetURL,
-  WALLET_PRIVATE_KEY: walletPrivateKey,
-  NFT_MARKET_NAME: marketName,
+  NEXT_PUBLIC_APTOS_NODE_URL: aptosNodeURL,
+  NEXT_PUBLIC_APTOS_FAUCET_URL: aptosFaucetURL,
+  NEXT_PUBLIC_WALLET_PRIVATE_KEY: walletPrivateKey,
+  NEXT_PUBLIC_NFT_MARKET_NAME: marketName,
 } = process.env;
 
 async function main() {
