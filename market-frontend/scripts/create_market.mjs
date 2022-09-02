@@ -29,7 +29,10 @@ async function main() {
     payload
   );
   const tx = await client.signAndSubmitTransaction(account, transaction);
-  console.log(tx);
+  const result = await client.aptosClient.waitForTransactionWithResult(tx, {
+    checkSuccess: true,
+  });
+  console.log(result);
 }
 
 main()
