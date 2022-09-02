@@ -1,34 +1,32 @@
 import { Card } from "../components/card";
 import { NFTItem } from "../types/item";
-import { useAptosGetListedTokens, useAptosWallet } from "../hooks/useAptos";
+import { useListedItems, useWallet } from "../hooks/useAptos";
 import { excuteTransaction } from "../utils/aptos";
 import { useRouter } from "next/router";
-
-const MARKET_ADDRESS = process.env.APTOS_NFT_MARKET_ADDRESS!;
+import { NFT_MARKET_ADDRESS, NFT_MARKET_NAME } from "../config/constants";
 
 export default function Home() {
   const router = useRouter();
-  const { address } = useAptosWallet();
-  const { listedTokens, loaded } = useAptosGetListedTokens();
+  const { address } = useWallet();
+  const { listedTokens, loaded } = useListedItems();
 
-  async function buyNft(item: NFTItem) {
+  async function buyItem(item: NFTItem) {
     const payload = {
-      type: "script_function_payload",
-      function: `${MARKET_ADDRESS}::FixedPriceListing::buy_token`,
+      type: "entry_function_payload",
+      function: `${NFT_MARKET_ADDRESS}::marketplace::buy_token`,
       type_arguments: ["0x1::aptos_coin::AptosCoin"],
-      arguments: [item.seller, item.creator, item.collection, item.name, "0"],
+      arguments: [
+        NFT_MARKET_ADDRESS,
+        NFT_MARKET_NAME,
+        item.creator,
+        item.collection,
+        item.name,
+        0,
+        +item.price!,
+      ],
     };
-    const tx = await excuteTransaction(address, payload);
-    if (tx) {
-      const resposne = await fetch(`/api/aptos/item/${item.id}`, {
-        method: "POST",
-      });
-      if (resposne.status == 200) {
-        router.reload();
-      } else {
-        console.log(await resposne.json());
-      }
-    }
+    await excuteTransaction(address, payload);
+    router.push("/dashboard");
   }
 
   return loaded && !listedTokens.length ? (
@@ -41,7 +39,7 @@ export default function Home() {
             key={i.toString()}
             data={item}
             type={"withBuyBtn"}
-            onClick={() => buyNft(item)}
+            onClick={() => buyItem(item)}
           />
         ))}
       </div>
