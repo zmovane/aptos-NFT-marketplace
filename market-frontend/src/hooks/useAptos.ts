@@ -1,35 +1,12 @@
 import { WalletClient } from "@martiandao/aptos-web3-bip44.js";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { NFTItem } from "../types/item";
-import { setIPFSGateway } from "../utils/nftstorage";
 
 const walletClient = new WalletClient(
   process.env.APTOS_NODE_URL,
   process.env.APTOS_FAUCET_URL
 );
-
-async function fillAuctionItem(data: any): Promise<NFTItem> {
-  const meta = (await axios.get(setIPFSGateway(data.uri))).data;
-  const item: NFTItem = {
-    id: data._id,
-    collection: data.collection,
-    creator: data.creator,
-    description: data.description,
-    isListing: data.isListing,
-    name: data.name,
-    price: data.price,
-    seller: data.seller,
-    type: "FixedPriceSale",
-    image: setIPFSGateway(meta.image),
-    uri: setIPFSGateway(data.uri),
-  };
-  return item;
-}
-
-export function useCreateMarket() {}
-
-export function useAptosWallet(): { address: string } {
+export function useWallet(): { address: string } {
   const [address, setAddress] = useState("");
   useEffect(() => {
     const connectAptosWallet = async () => {
@@ -47,29 +24,47 @@ export function useAptosWallet(): { address: string } {
   return { address };
 }
 
-export function useAptosGetListedTokens(): {
+export function useListedItems(): {
   listedTokens: NFTItem[];
   loaded: boolean;
 } {
-  const [listedTokens, updateListedTokens] = useState<NFTItem[]>([]);
+  const [listedItems, updateListedItems] = useState<NFTItem[]>([]);
   const [loaded, updateLoaded] = useState(false);
   useEffect(() => {
-    const req = async () => {
-      const response = await fetch("/api/aptos", {
-        method: "GET",
-      });
-      const items = await Promise.all(
-        (await response.json()).map(async (i: any) => await fillAuctionItem(i))
+    const fetchListedItems = async () => {
+      const marketAddress = `${process.env.NFT_MARKET_ADDRESS}`;
+      const listTokenEvents = await walletClient.getEventStream(
+        marketAddress,
+        `${marketAddress}::marketplace::MarketEvents`,
+        "list_token_events"
       );
-      updateListedTokens(items);
+      const items: NFTItem[] = await Promise.all(
+        listTokenEvents.map(async (event: any) => {
+          const tokenId = event.data.token_id;
+          const token = await walletClient.getToken(tokenId);
+          const item: NFTItem = {
+            collection: token.collection,
+            owner: marketAddress,
+            creator: tokenId.token_data_id.creator,
+            description: token.description,
+            name: token.name,
+            price: event.data.price,
+            seller: tokenId.creator,
+            type: "FixedPriceSale",
+            uri: token.uri,
+          };
+          return item;
+        })
+      );
+      updateListedItems(items);
       updateLoaded(true);
     };
-    req();
+    fetchListedItems();
   }, []);
-  return { listedTokens, loaded };
+  return { listedTokens: listedItems, loaded };
 }
 
-export function useAptosGetTokens(address: string): {
+export function useTokens(address: string): {
   items: NFTItem[];
   loaded: boolean;
 } {
@@ -86,23 +81,8 @@ export function useAptosGetTokens(address: string): {
           return token;
         })
       );
-      const items = await Promise.all(
-        tokens.map(async (i) => {
-          const meta = (await axios.get(setIPFSGateway(i.uri))).data;
-          const item: NFTItem = {
-            isListing: false,
-            name: i.name.toString(),
-            collection: i.collection.toString(),
-            description: i.description,
-            image: setIPFSGateway(meta.image),
-            uri: i.uri,
-            creator: i.creator,
-          };
-          return item;
-        })
-      );
       setLoaded(true);
-      setItems(items);
+      setItems(tokens);
     };
     if (address) {
       getTokens();
