@@ -1,7 +1,7 @@
-import { useAptosWallet } from "../hooks/useAptos";
+import { useWallet } from "../hooks/useAptos";
 
 export function AptosConnect() {
-  const { address } = useAptosWallet();
+  const { address } = useWallet();
   return address ? (
     <button
       className="btn btn-primary w-48"

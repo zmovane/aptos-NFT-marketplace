@@ -3,8 +3,8 @@ export async function excuteTransaction(
   payload: {
     type: string;
     function: string;
-    type_arguments: (string | string[] | undefined)[];
-    arguments: (string | string[] | undefined)[];
+    type_arguments: any[];
+    arguments: any[];
   }
 ) {
   const transaction = await (window as any).martian.generateTransaction(
