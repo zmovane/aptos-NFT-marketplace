@@ -1,0 +1,11 @@
+{
+  "name": "market-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@martiandao/aptos-web3-bip44.js": "^1.1.21",
+    "@prisma/client": "^4.3.1",
+    "prisma": "^4.3.1"
+  }
+}

@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  ongoing
+  revoked
+  finished
+}
+
+model Offer {
+  id              Int     @id @default(autoincrement())
+  token           Token   @relation(fields: [tokenCreator, tokenCollection, tokenName], references: [creator, collection, name])
+  price           Float
+  seller          String
+  buyer           String?
+  status          Status
+  tokenCreator    String
+  tokenCollection String
+  tokenName       String
+}
+
+model Token {
+  creator     String
+  collection  String
+  name        String
+  uri         String
+  description String
+  Offer       Offer[]
+
+  @@unique([creator, collection, name])
+}

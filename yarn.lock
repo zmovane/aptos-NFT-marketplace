@@ -143,6 +143,25 @@
     tweetnacl "^1.0.3"
     typescript-memoize "^1.1.0"
 
+"@martiandao/aptos-web3-bip44.js@^1.1.21":
+  version "1.1.21"
+  resolved "https://registry.yarnpkg.com/@martiandao/aptos-web3-bip44.js/-/aptos-web3-bip44.js-1.1.21.tgz#782fb48cfd4b0974dee7461c30e5a03e2dc19e81"
+  integrity sha512-oOEOrbw+kuB1+ZBxJtSWwWGCu+iGTBAxyFXWp/8FK2sO8tMi4SakNGobOUelmVQneUt4tVNPgwATVKkwtbQZ0g==
+  dependencies:
+    "@microsoft/eslint-formatter-sarif" "^2.1.7"
+    "@scure/bip32" "^1.0.1"
+    "@scure/bip39" "^1.0.0"
+    axios "^0.26.1"
+    brfs "^2.0.2"
+    buffer "^6.0.3"
+    cross-fetch "^3.1.5"
+    ed25519-hd-key "^1.3.0"
+    js-sha3 "^0.8.0"
+    node-cache "^5.1.2"
+    pre-commit "^1.2.2"
+    tweetnacl "^1.0.3"
+    typescript-memoize "^1.1.0"
+
 "@microsoft/eslint-formatter-sarif@^2.1.7":
   version "2.1.7"
   resolved "https://registry.yarnpkg.com/@microsoft/eslint-formatter-sarif/-/eslint-formatter-sarif-2.1.7.tgz#b6a1aef804b486e869214d620ccb7f461ae477d1"
@@ -261,6 +280,23 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@prisma/client@^4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.3.1.tgz#b9aad9bd9bd43e7f715ec1d763c8bd9273688800"
+  integrity sha512-FA0/d1VMJNWqzU7WVWTNWJ+lGOLR9JUBnF73GdIPAEVo/6dWk4gHx0EmgeU+SMv4MZoxgOeTBJF2azhg7x0hMw==
+  dependencies:
+    "@prisma/engines-version" "4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b"
+
+"@prisma/engines-version@4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b":
+  version "4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b.tgz#a564dd6fb6f25405fe06164989ebd8a1e4bb3508"
+  integrity sha512-8yWpXkQRmiSfsi2Wb/ZS5D3RFbeu/btL9Pm/gdF4phB0Lo5KGsDFMxFMgaD64mwED2nHc8ZaEJg/+4Jymb9Znw==
+
+"@prisma/engines@4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.3.1.tgz#fb0ad69eded13827fb4cd81995a351c234e8327f"
+  integrity sha512-4JF/uMaEDAPdcdZNOrnzE3BvrbGpjgV0FcPT3EVoi6I86fWkloqqxBt+KcK/+fIRR0Pxj66uGR9wVH8U1Y13JA==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -2906,6 +2942,13 @@ prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha512-ESF23V4SKG6lVSGZgYNpbsiaAkdab6ZgOxe52p7+Kid3W3u3bxR4Vfd/o21dmN7jSt0IwgZ4v5MUd26FEtXE9w==
+
+prisma@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.3.1.tgz#9e4c24e49710392be40ee75fb3d9341d7487881e"
+  integrity sha512-90xo06wtqil76Xsi3mNpc4Js3SdDRR5g4qb9h+4VWY4Y8iImJY6xc3PX+C9xxTSt1lr0Q89A0MLkJjd8ax6KiQ==
+  dependencies:
+    "@prisma/engines" "4.3.1"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
