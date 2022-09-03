@@ -1,27 +1,50 @@
-# Next.js + Tailwind CSS Example
+# Demo NFT marketplace
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+A full stack demo NFT marketplace based on aptos devnet. Aiming for clean and cocise code that is easy to understand and also make some automations to speed up full stack development.
 
-## Deploy your own
+## Tech stack
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+- code: Move, Typescript, [Next.js](https://nextjs.org/)
+- styles: [tailwindcss](https://tailwindcss.com), [daisyui](https://daisyui.com)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+## Development
 
-## How to use
+### Compile move module
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
+```
+NAME=<name> ADDRESS=<address> yarn workspace market-contracts move:compile
 ```
 
-```bash
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
+### Publish move module
+
+```
+NAME=<name> ADDRESS=<address> yarn workspace market-contracts move:publish
 ```
 
-```bash
-pnpm create next-app --example with-tailwindcss with-tailwindcss-app
+### Config .env.local file
+
+In order to expose a variable to the browser you have to prefix the variable with `NEXT_PUBLIC_`
+
+```
+NEXT_PUBLIC_NFT_STORAGE_KEY=
+NEXT_PUBLIC_NFT_MARKET_ADDRESS=0x64f236ab7ba803a8921c16fa2b9995da51033e3ed2e284e358f0d5431a39c0d0
+NEXT_PUBLIC_NFT_MARKET_NAME=_1200_dollars_per_hour
+
+NEXT_PUBLIC_APTOS_NODE_URL=https://fullnode.devnet.aptoslabs.com/v1/
+
+NEXT_PUBLIC_WALLET_PRIVATE_KEY=
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+Read more on [https://nextjs.org/docs/basic-features/environment-variables](https://nextjs.org/docs/basic-features/environment-variables)
+
+### Run script for create market
+
+```
+NODE_ENV=development yarn workspace market-frontend aptos:create-market
+```
+
+### Run dev
+
+```
+yarn workspace market-frontend dev
+```
