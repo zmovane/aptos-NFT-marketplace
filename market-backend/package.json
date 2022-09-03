@@ -2,6 +2,9 @@
   "name": "market-backend",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/EventsConsumer.ts"
+  },
   "license": "MIT",
   "dependencies": {
     "@martiandao/aptos-web3-bip44.js": "^1.1.21",

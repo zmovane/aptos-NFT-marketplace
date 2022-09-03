@@ -26,6 +26,9 @@ model Offer {
   tokenCreator    String
   tokenCollection String
   tokenName       String
+  seqNum          BigInt
+
+  @@map("offers")
 }
 
 model Token {
@@ -37,4 +40,5 @@ model Token {
   Offer       Offer[]
 
   @@unique([creator, collection, name])
+  @@map("tokens")
 }
