@@ -3,7 +3,11 @@ import { NFTItem } from "../types/item";
 import { useListedItems, useWallet } from "../hooks/useAptos";
 import { excuteTransaction } from "../utils/aptos";
 import { useRouter } from "next/router";
-import { NFT_MARKET_ADDRESS, NFT_MARKET_NAME } from "../config/constants";
+import {
+  MARKET_ADDRESS,
+  MARKET_COINT_TYPE,
+  MARKET_NAME,
+} from "../config/constants";
 
 export default function Home() {
   const router = useRouter();
@@ -13,11 +17,11 @@ export default function Home() {
   async function buyItem(item: NFTItem) {
     const payload = {
       type: "entry_function_payload",
-      function: `${NFT_MARKET_ADDRESS}::marketplace::buy_token`,
-      type_arguments: ["0x1::aptos_coin::AptosCoin"],
+      function: `${MARKET_ADDRESS}::marketplace::buy_token`,
+      type_arguments: [MARKET_COINT_TYPE],
       arguments: [
-        NFT_MARKET_ADDRESS,
-        NFT_MARKET_NAME,
+        MARKET_ADDRESS,
+        MARKET_NAME,
         item.creator,
         item.collection,
         item.name,

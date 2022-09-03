@@ -27,12 +27,14 @@ In order to expose a variable to the browser you have to prefix the variable wit
 
 ```
 NEXT_PUBLIC_NFT_STORAGE_KEY=
-NEXT_PUBLIC_NFT_MARKET_ADDRESS=0x64f236ab7ba803a8921c16fa2b9995da51033e3ed2e284e358f0d5431a39c0d0
-NEXT_PUBLIC_NFT_MARKET_NAME=_1200_dollars_per_hour
-
-NEXT_PUBLIC_APTOS_NODE_URL=https://fullnode.devnet.aptoslabs.com/v1/
-
 NEXT_PUBLIC_WALLET_PRIVATE_KEY=
+NEXT_PUBLIC_MARKET_ADDRESS=0x64f236ab7ba803a8921c16fa2b9995da51033e3ed2e284e358f0d5431a39c0d0
+NEXT_PUBLIC_MARKET_NAME=_1200_dollars_per_hour
+NEXT_PUBLIC_MARKET_FEE_NUMERATOR=10
+NEXT_PUBLIC_MARKET_INITIAL_FUND=10000
+NEXT_PUBLIC_MARKET_COIN_TYPE=0x1::aptos_coin::AptosCoin
+NEXT_PUBLIC_APTOS_NODE_URL=https://fullnode.devnet.aptoslabs.com/v1/
+NEXT_PUBLIC_APTOS_FAUCET_URL=https://faucet.devnet.aptoslabs.com/v1/
 ```
 
 Read more on [https://nextjs.org/docs/basic-features/environment-variables](https://nextjs.org/docs/basic-features/environment-variables)

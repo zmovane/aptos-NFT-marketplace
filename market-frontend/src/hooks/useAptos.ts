@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NFT_MARKET_ADDRESS } from "../config/constants";
+import { MARKET_ADDRESS } from "../config/constants";
 import { NFTItem } from "../types/item";
 import { walletClient } from "../utils/aptos";
 
@@ -30,8 +30,8 @@ export function useListedItems(): {
   useEffect(() => {
     const fetchListedItems = async () => {
       const listTokenEvents = await walletClient.getEventStream(
-        NFT_MARKET_ADDRESS!,
-        `${NFT_MARKET_ADDRESS}::marketplace::MarketEvents`,
+        MARKET_ADDRESS!,
+        `${MARKET_ADDRESS}::marketplace::MarketEvents`,
         "list_token_events"
       );
       const items: NFTItem[] = await Promise.all(
@@ -40,7 +40,7 @@ export function useListedItems(): {
           const token = await walletClient.getToken(tokenId);
           const item: NFTItem = {
             collection: token.collection,
-            owner: NFT_MARKET_ADDRESS,
+            owner: MARKET_ADDRESS,
             creator: tokenId.token_data_id.creator,
             description: token.description,
             name: token.name,

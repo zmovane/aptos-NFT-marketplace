@@ -3,7 +3,11 @@ import { useRouter } from "next/router";
 import { Card } from "../components/card";
 import { useWallet } from "../hooks/useAptos";
 import { excuteTransaction } from "../utils/aptos";
-import { NFT_MARKET_ADDRESS, NFT_MARKET_NAME } from "../config/constants";
+import {
+  MARKET_ADDRESS,
+  MARKET_COINT_TYPE,
+  MARKET_NAME,
+} from "../config/constants";
 
 export default function Auction() {
   const router = useRouter();
@@ -14,11 +18,11 @@ export default function Auction() {
   async function listNFTForSale() {
     const payload = {
       type: "entry_function_payload",
-      function: `${NFT_MARKET_ADDRESS}::marketplace::list_token`,
-      type_arguments: ["0x1::aptos_coin::AptosCoin"],
+      function: `${MARKET_ADDRESS}::marketplace::list_token`,
+      type_arguments: [MARKET_COINT_TYPE],
       arguments: [
-        NFT_MARKET_ADDRESS,
-        NFT_MARKET_NAME,
+        MARKET_ADDRESS,
+        MARKET_NAME,
         creator,
         collection,
         name,
