@@ -1,8 +1,10 @@
 module _1200_dollars_per_hour::marketplace{
     use std::signer;
     use std::string::String;
+    use aptos_framework::guid;
     use aptos_framework::coin;
     use aptos_framework::account;
+    use aptos_framework::timestamp;
     use aptos_std::event::{Self, EventHandle};    
     use aptos_std::table::{Self, Table};
     use aptos_token::token;
@@ -29,13 +31,13 @@ module _1200_dollars_per_hour::marketplace{
         buy_token_events: EventHandle<BuyTokenEvent>
     }
 
-    struct ListedItems has key {
-        items: Table<token::TokenId, ListedItem>
+    struct OfferStore has key {
+        offers: Table<token::TokenId, Offer>
     }
 
-    struct ListedItem has drop, store {
+    struct Offer has drop, store {
         market_id : MarketId,
-        token_owner: address,
+        seller: address,
         price: u64,
     }
 
@@ -48,16 +50,20 @@ module _1200_dollars_per_hour::marketplace{
     struct ListTokenEvent has drop, store {
         market_id: MarketId,
         token_id: token::TokenId,
-        token_owner: address,
-        price: u64
+        seller: address,
+        price: u64,
+        timestamp: u64,
+        offer_id: u64
     }
 
     struct BuyTokenEvent has drop, store {
         market_id: MarketId,
         token_id: token::TokenId,
-        token_owner: address,
+        seller: address,
         buyer: address,
-        price: u64
+        price: u64,
+        timestamp: u64,
+        offer_id: u64
     }
 
     fun get_resource_account_cap(market_address : address) : signer acquires Market{
@@ -75,9 +81,9 @@ module _1200_dollars_per_hour::marketplace{
                 buy_token_events: account::new_event_handle<BuyTokenEvent>(sender)
             });
         };
-        if(!exists<ListedItems>(sender_addr)){
-            move_to(sender, ListedItems{
-                items: table::new()
+        if(!exists<OfferStore>(sender_addr)){
+            move_to(sender, OfferStore{
+                offers: table::new()
             });
         };
         if(!exists<Market>(sender_addr)){
@@ -98,48 +104,58 @@ module _1200_dollars_per_hour::marketplace{
         }
     }
 
-    public entry fun list_token<CoinType>(token_owner: &signer, market_address:address, market_name: String, creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems {
+    public entry fun list_token<CoinType>(seller: &signer, market_address:address, market_name: String, creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, OfferStore {
         let market_id = MarketId { market_name, market_address };
         let resource_signer = get_resource_account_cap(market_address);
-        let token_owner_addr = signer::address_of(token_owner);
+        let seller_addr = signer::address_of(seller);
         let token_id = token::create_token_id_raw(creator, collection, name, property_version);
-        let token = token::withdraw_token(token_owner, token_id, 1);
+        let token = token::withdraw_token(seller, token_id, 1);
 
         token::deposit_token(&resource_signer, token);
         list_token_for_swap<CoinType>(&resource_signer, creator, collection, name, property_version, 1, price, 0);
 
-        let listed_items = borrow_global_mut<ListedItems>(market_address);
-        table::add(&mut listed_items.items, token_id, ListedItem {
-            market_id, token_owner: token_owner_addr, price
+        let offer_store = borrow_global_mut<OfferStore>(market_address);
+        table::add(&mut offer_store.offers, token_id, Offer {
+            market_id, seller: seller_addr, price
         });
 
+        let guid = account::create_guid(&resource_signer);
         let market_events = borrow_global_mut<MarketEvents>(market_address);
         event::emit_event(&mut market_events.list_token_events, ListTokenEvent{
-            market_id, token_id, token_owner: token_owner_addr, price
+            market_id, 
+            token_id, 
+            seller: seller_addr, 
+            price, 
+            timestamp: timestamp::now_microseconds(),
+            offer_id: guid::creation_num(&guid)
         });
     } 
 
-    public entry fun buy_token<CoinType>(buyer: &signer, market_address: address, market_name: String,creator: address, collection: String, name: String, property_version: u64, price: u64) acquires MarketEvents, Market, ListedItems{
+    public entry fun buy_token<CoinType>(buyer: &signer, market_address: address, market_name: String,creator: address, collection: String, name: String, property_version: u64, price: u64, offer_id: u64) acquires MarketEvents, Market, OfferStore{
         let market_id = MarketId { market_name, market_address };
         let token_id = token::create_token_id_raw(creator, collection, name, property_version);
-        let listed_items = borrow_global_mut<ListedItems>(market_address);
-        let token_owner = table::borrow(&listed_items.items, token_id).token_owner;
+        let offer_store = borrow_global_mut<OfferStore>(market_address);
+        let seller = table::borrow(&offer_store.offers, token_id).seller;
         let buyer_addr = signer::address_of(buyer);
-        assert!(token_owner != buyer_addr, ESELLER_CAN_NOT_BE_BUYER);
+        assert!(seller != buyer_addr, ESELLER_CAN_NOT_BE_BUYER);
 
         let resource_signer = get_resource_account_cap(market_address);
         exchange_coin_for_token<CoinType>(buyer, price, signer::address_of(&resource_signer), creator, collection, name, property_version, 1);
         
-        let royalty = token::get_royalty(token_id);
-        let royalty_fee = price * token::get_royalty_numerator(&royalty) / token::get_royalty_denominator(&royalty);
         let market = borrow_global<Market>(market_address);
         let market_fee = price * market.fee_numerator / FEE_DENOMINATOR;
-        let amount = price - royalty_fee - market_fee;
-        coin::transfer<CoinType>(&resource_signer, token_owner, amount);
-        table::remove(&mut listed_items.items, token_id);
+        let amount = price - market_fee;
+        coin::transfer<CoinType>(&resource_signer, seller, amount);
+        table::remove(&mut offer_store.offers, token_id);
         let market_events = borrow_global_mut<MarketEvents>(market_address);
         event::emit_event(&mut market_events.buy_token_events, BuyTokenEvent{
-            market_id ,token_id, token_owner, buyer: buyer_addr, price
+            market_id,
+            token_id, 
+            seller, 
+            buyer: buyer_addr, 
+            price,
+            timestamp: timestamp::now_microseconds(),
+            offer_id
         });
     }
 }
