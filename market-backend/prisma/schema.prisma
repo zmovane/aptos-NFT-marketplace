@@ -17,28 +17,46 @@ enum Status {
 }
 
 model Offer {
-  id              Int     @id @default(autoincrement())
-  token           Token   @relation(fields: [tokenCreator, tokenCollection, tokenName], references: [creator, collection, name])
-  price           Float
-  seller          String
-  buyer           String?
-  status          Status
-  tokenCreator    String
-  tokenCollection String
-  tokenName       String
-  seqNum          BigInt
+  id                   BigInt    @id
+  token                Token     @relation(fields: [tokenId], references: [id])
+  tokenId              BigInt    @default(autoincrement())
+  price                Float
+  seller               String
+  buyer                String?
+  status               Status
+  tokenPropertyVersion BigInt
+  tokenCreator         String
+  tokenCollection      String
+  tokenName            String
+  createAt             DateTime
+  updateAt             DateTime?
 
   @@map("offers")
 }
 
 model Token {
-  creator     String
-  collection  String
-  name        String
-  uri         String
-  description String
-  Offer       Offer[]
+  id              BigInt  @id @default(autoincrement())
+  propertyVersion BigInt
+  creator         String
+  collection      String
+  name            String
+  uri             String
+  description     String
+  // royaltyPayee       String
+  // royaltyNumerator   BigInt
+  // royaltyDenominator BigInt
+  maximum         BigInt
+  supply          BigInt
+  Offer           Offer[]
 
-  @@unique([creator, collection, name])
+  @@unique([propertyVersion, creator, collection, name])
   @@map("tokens")
+}
+
+model Execution {
+  id                       BigInt @id @default(autoincrement())
+  listEventsExecutedSeqNum BigInt
+  buyEventsExecutedSeqNum  BigInt
+
+  @@map("executions")
 }
