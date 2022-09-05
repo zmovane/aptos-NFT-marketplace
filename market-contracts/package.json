@@ -2,6 +2,7 @@
   "name": "market-contracts",
   "version": "0.1.1",
   "scripts": {
+    "move:init": "aptos init",
     "move:compile": "aptos move compile --package-dir . --named-addresses $NAME=$ADDRESS",
     "move:publish": "aptos move publish --package-dir . --named-addresses $NAME=$ADDRESS"
   }
