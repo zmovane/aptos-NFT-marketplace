@@ -4,8 +4,9 @@ A full stack demo NFT marketplace based on aptos devnet. Aiming for clean and co
 
 ## Tech stack
 
-- code: Move, Typescript, [Next.js](https://nextjs.org/)
-- styles: [tailwindcss](https://tailwindcss.com), [daisyui](https://daisyui.com)
+- Lang: Move, Typescript
+- Frontend: [Next.js](https://nextjs.org/), [tailwindcss](https://tailwindcss.com), [daisyui](https://daisyui.com)
+- Backend: [Supabase](https://supabase.com), [Prisma](https://prisma.io)
 
 ## Development
 
