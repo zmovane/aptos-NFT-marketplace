@@ -39,6 +39,7 @@ export function useListedItems(): {
           const tokenId = event.data.token_id;
           const token = await walletClient.getToken(tokenId);
           const item: NFTItem = {
+            id: event.data.offer_id,
             collection: token.collection,
             owner: MARKET_ADDRESS,
             creator: tokenId.token_data_id.creator,

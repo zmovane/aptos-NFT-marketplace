@@ -27,6 +27,7 @@ export default function Home() {
         item.name,
         0,
         +item.price!,
+        +item.id!,
       ],
     };
     await excuteTransaction(address, payload);

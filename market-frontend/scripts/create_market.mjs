@@ -26,9 +26,9 @@ async function main() {
     type_arguments: [COIN_TYPE],
     arguments: [
       MARKET_NAME,
-      FEE_NUMERATOR,
+      +FEE_NUMERATOR,
       `${account.address()}`,
-      INITIAL_FUND,
+      +INITIAL_FUND,
     ],
   };
   const transaction = await client.aptosClient.generateTransaction(
