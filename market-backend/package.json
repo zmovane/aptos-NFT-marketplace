@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/EventsConsumer.ts",
+    "start": "ts-node src/Execution.ts",
     "seed": "ts-node prisma/seed.ts"
   },
   "license": "MIT",
   "dependencies": {
     "@martiandao/aptos-web3-bip44.js": "^1.1.21",
     "@prisma/client": "^4.3.1",
-    "prisma": "^4.3.1"
+    "prisma": "^4.3.1",
+    "rxjs": "^7.5.6"
   }
 }

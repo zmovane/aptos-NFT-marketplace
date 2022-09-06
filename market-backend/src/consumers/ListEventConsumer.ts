@@ -1,28 +1,34 @@
 import { TokenTypes } from "@martiandao/aptos-web3-bip44.js";
 import { Execution } from "@prisma/client";
-import { MARKET_ADDRESS } from "../config/constants";
-import { aptosClient, prismaClient, walletClient } from "../config/libs";
-import { ListTokenEventData } from "../types";
-import { delay } from "../utils/delay";
+import { prismaClient, walletClient } from "../config/libs";
+import { State } from "../State";
+import { ListTokenEventData, Event } from "../types";
+import { Consumer, handleError } from "./Consumer";
 
-export async function loopConsumeListEvents(listEventsExecutedSeqNum: bigint) {
-  let seqNum = listEventsExecutedSeqNum;
-  while (true) {
-    seqNum = await consumeListEvents(seqNum);
-    await delay(5000);
+export class ListEventConsumer implements Consumer<ListTokenEventData> {
+  async consumeAll(
+    state: State,
+    events: Event<ListTokenEventData>[]
+  ): Promise<State> {
+    delete state.old;
+    let newState = state;
+    newState.old = { ...state };
+    for (const event of events) {
+      const { success, state } = await this.consume(newState, event);
+      if (success) {
+        newState.listEventsExecutedSeqNum = state.listEventsExecutedSeqNum;
+      } else {
+        return newState;
+      }
+    }
+    return newState;
   }
-}
+  async consume(
+    state: State,
+    event: Event<ListTokenEventData>
+  ): Promise<{ success: boolean; state: State }> {
+    let newState = state;
 
-async function consumeListEvents(start: bigint): Promise<bigint> {
-  const listTokenEvents = await aptosClient.getEventsByEventHandle(
-    MARKET_ADDRESS!,
-    `${MARKET_ADDRESS}::marketplace::MarketEvents`,
-    "list_token_events",
-    { start: start + 1n, limit: 100 }
-  );
-
-  let seqNum: bigint = start;
-  for (const event of listTokenEvents) {
     const transactions = [];
     const data = event.data as ListTokenEventData;
     const tokenDataId = data.token_id.token_data_id;
@@ -60,8 +66,8 @@ async function consumeListEvents(start: bigint): Promise<bigint> {
         });
       }
     } catch (e) {
-      console.error(e);
-      return seqNum;
+      handleError(e);
+      return { success: false, state: newState };
     }
 
     const executedSeqNum = BigInt(event.sequence_number);
@@ -98,12 +104,14 @@ async function consumeListEvents(start: bigint): Promise<bigint> {
     );
 
     try {
-      const [execution] = await prismaClient.$transaction(transactions);
-      seqNum = (execution as Execution).listEventsExecutedSeqNum;
+      const [execution, _] = await prismaClient.$transaction(transactions);
+      newState.listEventsExecutedSeqNum = (
+        execution as Execution
+      ).listEventsExecutedSeqNum;
+      return { success: true, state: newState };
     } catch (e: any) {
-      console.error(e);
-      return seqNum;
+      handleError(e);
+      return { success: false, state: newState };
     }
   }
-  return seqNum;
 }
