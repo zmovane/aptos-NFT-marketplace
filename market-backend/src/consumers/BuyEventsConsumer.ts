@@ -1,12 +1,12 @@
 import { MARKET_ADDRESS } from "../config/constants";
-import { aptosClient, prismaClient, walletClient } from "../config/libs";
+import { aptosClient, prismaClient } from "../config/libs";
 import { BuyTokenEventData } from "../types";
 import { delay } from "../utils/delay";
 
 export async function loopConsumeBuyEvents(buyEventsExecutedSeqNum: bigint) {
   let seqNum = buyEventsExecutedSeqNum;
   while (true) {
-    seqNum = await consumeBuyEvents(seqNum + 1n);
+    seqNum = await consumeBuyEvents(seqNum);
     await delay(5000);
   }
 }
@@ -16,7 +16,7 @@ async function consumeBuyEvents(start: bigint): Promise<bigint> {
     MARKET_ADDRESS!,
     `${MARKET_ADDRESS}::marketplace::MarketEvents`,
     "buy_token_events",
-    { start, limit: 100 }
+    { start: start + 1n, limit: 100 }
   );
 
   let seqNum = start;

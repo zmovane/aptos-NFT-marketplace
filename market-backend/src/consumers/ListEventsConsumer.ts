@@ -8,7 +8,7 @@ import { delay } from "../utils/delay";
 export async function loopConsumeListEvents(listEventsExecutedSeqNum: bigint) {
   let seqNum = listEventsExecutedSeqNum;
   while (true) {
-    seqNum = await consumeListEvents(seqNum + 1n);
+    seqNum = await consumeListEvents(seqNum);
     await delay(5000);
   }
 }
@@ -18,7 +18,7 @@ async function consumeListEvents(start: bigint): Promise<bigint> {
     MARKET_ADDRESS!,
     `${MARKET_ADDRESS}::marketplace::MarketEvents`,
     "list_token_events",
-    { start, limit: 100 }
+    { start: start + 1n, limit: 100 }
   );
 
   let seqNum: bigint = start;
