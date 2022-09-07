@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { Card } from "../components/card";
 import { useWallet } from "../hooks/useAptos";
 import { excuteTransaction } from "../utils/aptos";
 import {
@@ -8,6 +7,8 @@ import {
   MARKET_COINT_TYPE,
   MARKET_NAME,
 } from "../config/constants";
+import { TokenCard } from "../components/TokenCard";
+import { Token } from "../types";
 
 export default function Auction() {
   const router = useRouter();
@@ -37,12 +38,7 @@ export default function Auction() {
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="w-1/5 my-8">
-        <Card
-          key={`${collection}/${name}`}
-          data={{ name, collection, uri, description }}
-          type={"noraml"}
-          onClick={undefined}
-        />
+        <TokenCard data={{ name, collection, uri, description } as Token} />
       </div>
       <div className="w-1/4 flex flex-col pb-12">
         <input

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { MARKET_ADDRESS } from "../config/constants";
-import { NFTItem } from "../types/item";
+import { Offer, Token } from "../types";
 import { walletClient } from "../utils/aptos";
 
 export function useWallet(): { address: string } {
@@ -21,51 +20,31 @@ export function useWallet(): { address: string } {
   return { address };
 }
 
-export function useListedItems(): {
-  listedTokens: NFTItem[];
+export function useOffers(): {
+  offers: Offer[];
   loaded: boolean;
 } {
-  const [listedItems, updateListedItems] = useState<NFTItem[]>([]);
+  const [offers, updateOffers] = useState<Offer[]>([]);
   const [loaded, updateLoaded] = useState(false);
   useEffect(() => {
-    const fetchListedItems = async () => {
-      const listTokenEvents = await walletClient.getEventStream(
-        MARKET_ADDRESS!,
-        `${MARKET_ADDRESS}::marketplace::MarketEvents`,
-        "list_token_events"
-      );
-      const items: NFTItem[] = await Promise.all(
-        listTokenEvents.map(async (event: any) => {
-          const tokenId = event.data.token_id;
-          const token = await walletClient.getToken(tokenId);
-          const item: NFTItem = {
-            id: event.data.offer_id,
-            collection: token.collection,
-            owner: MARKET_ADDRESS,
-            creator: tokenId.token_data_id.creator,
-            description: token.description,
-            name: token.name,
-            price: event.data.price,
-            seller: tokenId.creator,
-            type: "FixedPriceSale",
-            uri: token.uri,
-          };
-          return item;
-        })
-      );
-      updateListedItems(items);
+    const fetchOffers = async () => {
+      const response = await fetch("/api/offers");
+      const offers = (await response.json()).map((i: any) => i as Offer);
+      console.log(offers)
+
+      updateOffers(offers);
       updateLoaded(true);
     };
-    fetchListedItems();
+    fetchOffers();
   }, []);
-  return { listedTokens: listedItems, loaded };
+  return { offers, loaded };
 }
 
 export function useTokens(address: string): {
-  items: NFTItem[];
+  tokens: Token[];
   loaded: boolean;
 } {
-  const [items, setItems] = useState<NFTItem[]>([]);
+  const [tokens, setTokens] = useState<Token[]>([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -74,16 +53,25 @@ export function useTokens(address: string): {
       const tokens = await Promise.all(
         tokenIds.map(async (i) => {
           const token = await walletClient.getToken(i.data);
-          token.creator = i.data.token_data_id.creator;
-          return token;
+
+          return {
+            propertyVersion: i.data.property_version,
+            creator: i.data.token_data_id.creator,
+            collection: token.collection,
+            name: token.name,
+            description: token.description,
+            uri: token.uri,
+            maximum: token.maximum,
+            supply: token.supply,
+          };
         })
       );
       setLoaded(true);
-      setItems(tokens);
+      setTokens(tokens);
     };
     if (address) {
       getTokens();
     }
   }, [address]);
-  return { items, loaded };
+  return { tokens, loaded };
 }

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { NavItem } from "./navitem";
+import { NavItem } from "./NavItem";
 import { AptosConnect } from "./AptosConnect";
 
 export function NavBar() {

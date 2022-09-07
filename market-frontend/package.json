@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@martiandao/aptos-web3-bip44.js": "^1.1.20",
+    "@supabase/supabase-js": "^1.35.6",
     "@types/mime": "^3.0.1",
     "axios": "^0.27.2",
     "daisyui": "^2.24.0",
