@@ -1,24 +1,7 @@
+import { AccountKeys } from "@manahippo/aptos-wallet-adapter";
 import { useEffect, useState } from "react";
 import { Offer, Token } from "../types";
 import { walletClient } from "../utils/aptos";
-
-export function useWallet(): { address: string } {
-  const [address, setAddress] = useState("");
-  useEffect(() => {
-    const connectAptosWallet = async () => {
-      const { address } = await (window as any).martian.connect();
-      if (address) {
-        setAddress(address);
-      }
-    };
-    if ("martian" in window) {
-      connectAptosWallet();
-    } else {
-      window.open("https://www.martianwallet.xyz/", "_blank");
-    }
-  }, []);
-  return { address };
-}
 
 export function useOffers(): {
   offers: Offer[];
@@ -30,8 +13,6 @@ export function useOffers(): {
     const fetchOffers = async () => {
       const response = await fetch("/api/offers");
       const offers = (await response.json()).map((i: any) => i as Offer);
-      console.log(offers)
-
       updateOffers(offers);
       updateLoaded(true);
     };
@@ -40,7 +21,7 @@ export function useOffers(): {
   return { offers, loaded };
 }
 
-export function useTokens(address: string): {
+export function useTokens(account: AccountKeys | null): {
   tokens: Token[];
   loaded: boolean;
 } {
@@ -49,7 +30,11 @@ export function useTokens(address: string): {
 
   useEffect(() => {
     const getTokens = async () => {
-      const tokenIds = await walletClient.getTokenIds(address, 100, 0);
+      const tokenIds = await walletClient.getTokenIds(
+        account!.address!.toString(),
+        100,
+        0
+      );
       const tokens = await Promise.all(
         tokenIds.map(async (i) => {
           const token = await walletClient.getToken(i.data);
@@ -69,9 +54,9 @@ export function useTokens(address: string): {
       setLoaded(true);
       setTokens(tokens);
     };
-    if (address) {
+    if (account?.address) {
       getTokens();
     }
-  }, [address]);
+  }, [account]);
   return { tokens, loaded };
 }

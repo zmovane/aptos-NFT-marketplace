@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useWallet } from "../hooks/useAptos";
-import { excuteTransaction } from "../utils/aptos";
 import {
   MARKET_ADDRESS,
   MARKET_COINT_TYPE,
@@ -9,11 +7,12 @@ import {
 } from "../config/constants";
 import { TokenCard } from "../components/TokenCard";
 import { Token } from "../types";
+import { useWallet } from "@manahippo/aptos-wallet-adapter";
 
 export default function Auction() {
   const router = useRouter();
   const { creator, name, collection, uri, description } = router.query;
-  const { address } = useWallet();
+  const { signAndSubmitTransaction } = useWallet();
   const [price, updatePrice] = useState("");
 
   async function listNFTForSale() {
@@ -31,7 +30,7 @@ export default function Auction() {
         +price,
       ],
     };
-    await excuteTransaction(address, payload);
+    await signAndSubmitTransaction(payload);
     router.push("/");
   }
 

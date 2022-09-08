@@ -1,21 +1,35 @@
 import { Offer } from "../types";
-import { useOffers, useWallet } from "../hooks/useAptos";
-import { excuteTransaction } from "../utils/aptos";
+import { useOffers } from "../hooks/useAptos";
 import { useRouter } from "next/router";
 import {
+  KEY_CONNECTED_WALLET,
   MARKET_ADDRESS,
   MARKET_COINT_TYPE,
   MARKET_NAME,
 } from "../config/constants";
 import { OfferCard } from "../components/OfferCard";
+import { useWallet } from "@manahippo/aptos-wallet-adapter";
+import { TransactionPayload } from "@martiandao/aptos-web3-bip44.js/dist/generated";
+import { useContext } from "react";
+import { ModalContext } from "../components/ModalContext";
 
 export default function Home() {
   const router = useRouter();
-  const { address } = useWallet();
+  const { connect, account, signAndSubmitTransaction } = useWallet();
+  const { modalState, setModalState } = useContext(ModalContext);
   const { offers, loaded } = useOffers();
 
   async function claimOffer(offer: Offer) {
-    const payload = {
+    if (!account) {
+      const connectedWallet = localStorage.getItem(KEY_CONNECTED_WALLET);
+      if (connectedWallet) {
+        connect(connectedWallet);
+      } else {
+        setModalState({ ...modalState, walletModal: true });
+      }
+    }
+
+    const payload: TransactionPayload = {
       type: "entry_function_payload",
       function: `${MARKET_ADDRESS}::marketplace::buy_token`,
       type_arguments: [MARKET_COINT_TYPE],
@@ -30,7 +44,8 @@ export default function Home() {
         offer.id,
       ],
     };
-    await excuteTransaction(address, payload);
+
+    await signAndSubmitTransaction(payload);
     router.push("/dashboard");
   }
 

@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["ipfs.infura.io", "nftstorage.link", "aptoslabs.com"],
+    domains: ["ipfs.infura.io", "nftstorage.link", "aptoslabs.com", "miro.medium.com"],
   },
   webpack5: true,
   webpack: (config) => {

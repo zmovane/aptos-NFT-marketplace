@@ -1,11 +1,11 @@
 import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { nftStorage } from "../utils/nftstorage";
-import { useWallet } from "../hooks/useAptos";
+import { useWallet } from "@manahippo/aptos-wallet-adapter";
 
 export default function Mint() {
   const router = useRouter();
-  const { address } = useWallet();
+  const { account } = useWallet();
   const [base64image, setBase64image] = useState("");
   const [formInput, updateFormInput] = useState<{
     name: string;
@@ -29,7 +29,7 @@ export default function Mint() {
 
   async function mintNFT() {
     const { name, description, file } = formInput;
-    if (!address || !name || !description || !file) return;
+    if (!account || !name || !description || !file) return;
     try {
       const token = await nftStorage.upload(file, name, description);
       const image = await nftStorage.getImageURL(token.url);
@@ -49,7 +49,7 @@ export default function Mint() {
         description,
         1,
         image,
-        address
+        account!.address!.toString()!
       );
 
       router.push("/dashboard");

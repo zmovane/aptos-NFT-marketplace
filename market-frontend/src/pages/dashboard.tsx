@@ -1,10 +1,11 @@
-import { useTokens, useWallet } from "../hooks/useAptos";
+import { useTokens } from "../hooks/useAptos";
 import { useRouter } from "next/router";
 import { ListCard } from "../components/ListCard";
+import { useWallet } from "@manahippo/aptos-wallet-adapter";
 
 export default function Dashboard() {
-  const { address } = useWallet();
-  const { tokens, loaded } = useTokens(address);
+  const { account } = useWallet();
+  const { tokens, loaded } = useTokens(account);
   const router = useRouter();
   return loaded && !tokens.length ? (
     <h2 className="text-2xl p-8">No NFTs owned</h2>
