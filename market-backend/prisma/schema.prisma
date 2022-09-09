@@ -45,8 +45,9 @@ model Token {
   // royaltyPayee       String
   // royaltyNumerator   BigInt
   // royaltyDenominator BigInt
-  maximum         BigInt
-  supply          BigInt
+  // https://github.com/prisma/prisma/issues/14231
+  maximum         String?
+  supply          String
   Offer           Offer[]
 
   @@unique([propertyVersion, creator, collection, name])

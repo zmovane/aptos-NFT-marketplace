@@ -1,8 +1,8 @@
-import { TokenTypes } from "@martiandao/aptos-web3-bip44.js";
 import { Execution } from "@prisma/client";
 import { prismaClient, walletClient } from "../config/libs";
 import { State } from "../State";
 import { ListTokenEventData, Event } from "../types";
+import { TokenData } from "../types/structs/TokenData";
 import { Consumer, handleError } from "./Consumer";
 
 export class ListEventConsumer implements Consumer<ListTokenEventData> {
@@ -51,7 +51,7 @@ export class ListEventConsumer implements Consumer<ListTokenEventData> {
     try {
       if (!token) {
         const { description, uri, maximum, supply } =
-          (await walletClient.getToken(data.token_id)) as TokenTypes.TokenData;
+          (await walletClient.getToken(data.token_id)) as TokenData;
         token = await prismaClient.token.create({
           data: {
             creator,
@@ -60,8 +60,8 @@ export class ListEventConsumer implements Consumer<ListTokenEventData> {
             name,
             uri,
             description,
-            maximum: BigInt(maximum ?? -1),
-            supply: BigInt(supply),
+            maximum: maximum,
+            supply: supply,
           },
         });
       }
