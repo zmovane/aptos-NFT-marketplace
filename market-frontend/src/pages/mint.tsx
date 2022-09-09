@@ -2,10 +2,15 @@ import { ChangeEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { nftStorage } from "../utils/nftstorage";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
+import {
+  createCollectionPayload,
+  createTokenPayload,
+  walletClient,
+} from "../utils/aptos";
 
 export default function Mint() {
   const router = useRouter();
-  const { account } = useWallet();
+  const { account, signAndSubmitTransaction } = useWallet();
   const [base64image, setBase64image] = useState("");
   const [formInput, updateFormInput] = useState<{
     collection: string;
@@ -29,25 +34,31 @@ export default function Mint() {
     reader.readAsDataURL(file);
   }
 
+  async function createCollection(address: string, collection: string) {
+    try {
+      await walletClient.getCollection(address, collection);
+    } catch (e) {
+      await signAndSubmitTransaction(
+        createCollectionPayload(
+          collection,
+          "_1200_dollars_per_hour",
+          "https://github.com/amovane/aptos-NFT-marketplace"
+        )
+      );
+    }
+  }
+
   async function mintNFT() {
     const { collection, name, description, file } = formInput;
     if (!account || !collection || !name || !description || !file) return;
     try {
+      const address = account!.address!.toString();
       const token = await nftStorage.upload(file, name, description);
       const image = await nftStorage.getImageURL(token.url);
 
-      await (window as any).martian.createCollection(
-        collection,
-        "_1200_dollars_per_hour",
-        "https://github.com/amovane/aptos-NFT-marketplace"
-      );
-      await (window as any).martian.createToken(
-        collection,
-        name,
-        description,
-        1,
-        image,
-        account!.address!.toString()!
+      await createCollection(address, collection);
+      await signAndSubmitTransaction(
+        createTokenPayload(collection, name, description, image, address)
       );
 
       router.push("/dashboard");

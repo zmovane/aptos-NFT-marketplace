@@ -1,20 +1,48 @@
 import { WalletClient } from "@martiandao/aptos-web3-bip44.js";
 import { APTOS_FAUCET_URL, APTOS_NODE_URL } from "../config/constants";
 
-export async function excuteTransaction(
-  address: string,
-  payload: {
-    type: string;
-    function: string;
-    type_arguments: any[];
-    arguments: any[];
-  }
+const NUMBER_MAX: number = 9007199254740991;
+
+export function createCollectionPayload(
+  name: string,
+  description: string,
+  uri: string
 ) {
-  const transaction = await (window as any).martian.generateTransaction(
-    address,
-    payload
-  );
-  return await (window as any).martian.signAndSubmitTransaction(transaction);
+  return {
+    type: "entry_function_payload",
+    function: "0x3::token::create_collection_script",
+    type_arguments: [],
+    arguments: [name, description, uri, NUMBER_MAX, [false, false, false]],
+  };
+}
+
+export function createTokenPayload(
+  collection: string,
+  name: string,
+  description: string,
+  uri: string,
+  royaltyPayee: string
+) {
+  return {
+    type: "entry_function_payload",
+    function: "0x3::token::create_token_script",
+    type_arguments: [],
+    arguments: [
+      collection,
+      name,
+      description,
+      1,
+      NUMBER_MAX,
+      uri,
+      royaltyPayee,
+      100,
+      0,
+      [false, false, false, false, false],
+      [],
+      [],
+      [],
+    ],
+  };
 }
 
 export const walletClient = new WalletClient(APTOS_NODE_URL, APTOS_FAUCET_URL);
