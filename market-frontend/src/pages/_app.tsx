@@ -3,9 +3,11 @@ import { NavBar } from "../components/NavBar";
 import type { AppProps } from "next/app";
 import { useMemo, useState } from "react";
 import {
-  AptosWalletAdapter,
+  FewchaWalletAdapter,
+  PontemWalletAdapter,
   MartianWalletAdapter,
   WalletProvider,
+  AptosWalletAdapter,
 } from "@manahippo/aptos-wallet-adapter";
 import { ModalContext, ModalState } from "../components/ModalContext";
 function MyApp({ Component, pageProps }: AppProps) {
@@ -13,7 +15,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     walletModal: false,
   });
   const wallets = useMemo(
-    () => [new MartianWalletAdapter(), new AptosWalletAdapter()],
+    () => [
+      new AptosWalletAdapter(),
+      new MartianWalletAdapter(),
+      new PontemWalletAdapter(),
+      new FewchaWalletAdapter(),
+    ],
     []
   );
   const modals = useMemo(

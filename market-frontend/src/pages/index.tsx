@@ -26,7 +26,7 @@ export default function Home() {
         await connect(connectedWallet);
       } else {
         setModalState({ ...modalState, walletModal: true });
-        return
+        return;
       }
     }
 
@@ -40,9 +40,9 @@ export default function Home() {
         offer.token.creator,
         offer.token.collection,
         offer.token.name,
-        offer.token.propertyVersion,
-        offer.price,
-        offer.id,
+        `${offer.token.propertyVersion}`,
+        `${offer.price}`,
+        `${offer.id}`,
       ],
     };
 

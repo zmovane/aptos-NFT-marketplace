@@ -26,8 +26,8 @@ export default function MakeOffer() {
         creator,
         collection,
         name,
-        0,
-        +price,
+        "0",
+        price,
       ],
     };
     await signAndSubmitTransaction(payload);

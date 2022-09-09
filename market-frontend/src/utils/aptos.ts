@@ -1,7 +1,7 @@
 import { WalletClient } from "@martiandao/aptos-web3-bip44.js";
 import { APTOS_FAUCET_URL, APTOS_NODE_URL } from "../config/constants";
 
-const NUMBER_MAX: number = 9007199254740991;
+const MAX_U64_BIG_INT: bigint = BigInt(2 ** 64) - BigInt(1);
 
 export function createCollectionPayload(
   name: string,
@@ -12,7 +12,13 @@ export function createCollectionPayload(
     type: "entry_function_payload",
     function: "0x3::token::create_collection_script",
     type_arguments: [],
-    arguments: [name, description, uri, NUMBER_MAX, [false, false, false]],
+    arguments: [
+      name,
+      description,
+      uri,
+      MAX_U64_BIG_INT.toString(),
+      [false, false, false],
+    ],
   };
 }
 
@@ -31,12 +37,12 @@ export function createTokenPayload(
       collection,
       name,
       description,
-      1,
-      NUMBER_MAX,
+      "1",
+      MAX_U64_BIG_INT.toString(),
       uri,
       royaltyPayee,
-      100,
-      0,
+      "100",
+      "0",
       [false, false, false, false, false],
       [],
       [],
