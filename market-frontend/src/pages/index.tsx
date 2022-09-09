@@ -1,5 +1,5 @@
 import { Offer } from "../types";
-import { useOffers } from "../hooks/useAptos";
+import { useOffers } from "../hooks";
 import { useRouter } from "next/router";
 import {
   KEY_CONNECTED_WALLET,
