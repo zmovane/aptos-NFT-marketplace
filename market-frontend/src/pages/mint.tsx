@@ -8,10 +8,12 @@ export default function Mint() {
   const { account } = useWallet();
   const [base64image, setBase64image] = useState("");
   const [formInput, updateFormInput] = useState<{
+    collection: string;
     name: string;
     description: string;
     file: File | null;
   }>({
+    collection: "",
     name: "",
     description: "",
     file: null,
@@ -28,23 +30,19 @@ export default function Mint() {
   }
 
   async function mintNFT() {
-    const { name, description, file } = formInput;
-    if (!account || !name || !description || !file) return;
+    const { collection, name, description, file } = formInput;
+    if (!account || !collection || !name || !description || !file) return;
     try {
       const token = await nftStorage.upload(file, name, description);
       const image = await nftStorage.getImageURL(token.url);
 
-      const collName = "collName" + new Date().getMilliseconds();
-      const collDescription = "Demo NFT Collection";
-      const collUri = "https://aptos.dev";
-
       await (window as any).martian.createCollection(
-        collName,
-        collDescription,
-        collUri
+        collection,
+        "_1200_dollars_per_hour",
+        "https://github.com/amovane/aptos-NFT-marketplace"
       );
       await (window as any).martian.createToken(
-        collName,
+        collection,
         name,
         description,
         1,
@@ -62,14 +60,21 @@ export default function Mint() {
     <div className="flex justify-center">
       <div className="w-1/2 flex flex-col pb-12">
         <input
-          placeholder="Asset Name"
+          placeholder="Collection Name"
+          className="mt-8 p-4 input input-bordered input-primary w-full"
+          onChange={(e) =>
+            updateFormInput({ ...formInput, collection: e.target.value })
+          }
+        />
+        <input
+          placeholder="Token Name"
           className="mt-8 p-4 input input-bordered input-primary w-full"
           onChange={(e) =>
             updateFormInput({ ...formInput, name: e.target.value })
           }
         />
         <textarea
-          placeholder="Asset Description"
+          placeholder="Token Description"
           className="mt-2 p-4 textarea textarea-primary input-lg w-full"
           onChange={(e) =>
             updateFormInput({ ...formInput, description: e.target.value })
