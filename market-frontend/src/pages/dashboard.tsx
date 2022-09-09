@@ -20,7 +20,7 @@ export default function Dashboard() {
               data={token}
               onClick={() =>
                 router.push(
-                  `/auction?creator=${token.creator}&name=${token.name}&collection=${token.collection}&description=${token.description}&uri=${token.uri}`
+                  `/make-offer?creator=${token.creator}&name=${token.name}&collection=${token.collection}&description=${token.description}&uri=${token.uri}`
                 )
               }
             />

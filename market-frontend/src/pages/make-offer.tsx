@@ -9,13 +9,13 @@ import { TokenCard } from "../components/TokenCard";
 import { Token } from "../types";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
 
-export default function Auction() {
+export default function MakeOffer() {
   const router = useRouter();
   const { creator, name, collection, uri, description } = router.query;
   const { signAndSubmitTransaction } = useWallet();
   const [price, updatePrice] = useState("");
 
-  async function listNFTForSale() {
+  async function makeOffer() {
     const payload = {
       type: "entry_function_payload",
       function: `${MARKET_ADDRESS}::marketplace::list_token`,
@@ -47,7 +47,7 @@ export default function Auction() {
           onChange={(e) => updatePrice(e.target.value)}
         />
         <button
-          onClick={listNFTForSale}
+          onClick={makeOffer}
           className="btn btn-primary font-bold mt-4 text-white rounded p-4 shadow-lg"
         >
           List NFT
