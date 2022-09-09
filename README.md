@@ -1,5 +1,9 @@
 # Demo NFT marketplace
 
+<p align="center">
+  <img src="pics/logo.svg" height=150></img>
+</p>
+
 A full stack demo NFT marketplace based on aptos devnet. Aiming for clean and cocise code that is easy to understand and also make some automations to speed up full stack development.
 
 ## Tech stack
@@ -32,7 +36,7 @@ A full stack demo NFT marketplace based on aptos devnet. Aiming for clean and co
   yarn workspace market-frontend install
   ```
 
-- Config .env.local file
+- Config `.env.development.local`
 
   In order to expose a variable to the browser you have to prefix the variable with `NEXT_PUBLIC_`
 
@@ -74,6 +78,15 @@ A full stack demo NFT marketplace based on aptos devnet. Aiming for clean and co
 
   // set up a new Prisma project
   yarn workspace market-backend prisma init
+  ```
+
+- Config `.env`
+
+  ```
+  DATABASE_URL=<YOUR SUPABASE DB URL>
+  APTOS_NODE_URL=https://fullnode.devnet.aptoslabs.com/v1/
+  APTOS_FAUCET_URL=https://faucet.devnet.aptoslabs.com/
+  MARKET_ADDRESS=<YOUR MARKET ACCOUNT>
   ```
 
 - DB Migration
