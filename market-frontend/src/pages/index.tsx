@@ -23,9 +23,10 @@ export default function Home() {
     if (!account) {
       const connectedWallet = localStorage.getItem(KEY_CONNECTED_WALLET);
       if (connectedWallet) {
-        connect(connectedWallet);
+        await connect(connectedWallet);
       } else {
         setModalState({ ...modalState, walletModal: true });
+        return
       }
     }
 
