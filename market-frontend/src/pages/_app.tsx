@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 
   return (
-    <WalletProvider wallets={wallets}>
+    <WalletProvider wallets={wallets} autoConnect={true}>
       <ModalContext.Provider value={modals}>
         <div className="px-8">
           <NavBar />

@@ -1,7 +1,6 @@
 import { useWallet, Wallet } from "@manahippo/aptos-wallet-adapter";
 import Image from "next/image";
 import { useContext } from "react";
-import { KEY_CONNECTED_WALLET } from "../config/constants";
 import { ModalContext } from "./ModalContext";
 
 export function WalletModal() {
@@ -9,8 +8,7 @@ export function WalletModal() {
   const { modalState, setModalState } = useContext(ModalContext);
 
   async function connectWallet(wallet: Wallet) {
-    await connect(wallet.adapter.name);
-    localStorage.setItem(KEY_CONNECTED_WALLET, wallet.adapter.name);
+    connect(wallet.adapter.name);
     setModalState({ ...modalState, walletModal: false });
   }
 

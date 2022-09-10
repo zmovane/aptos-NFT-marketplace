@@ -2,7 +2,6 @@ import { Offer } from "../types";
 import { useOffers } from "../hooks";
 import { useRouter } from "next/router";
 import {
-  KEY_CONNECTED_WALLET,
   MARKET_ADDRESS,
   MARKET_COINT_TYPE,
   MARKET_NAME,
@@ -15,19 +14,14 @@ import { ModalContext } from "../components/ModalContext";
 
 export default function Home() {
   const router = useRouter();
-  const { connect, account, signAndSubmitTransaction } = useWallet();
+  const { account, signAndSubmitTransaction } = useWallet();
   const { modalState, setModalState } = useContext(ModalContext);
   const { offers, loaded } = useOffers();
 
   async function claimOffer(offer: Offer) {
     if (!account) {
-      const connectedWallet = localStorage.getItem(KEY_CONNECTED_WALLET);
-      if (connectedWallet) {
-        await connect(connectedWallet);
-      } else {
-        setModalState({ ...modalState, walletModal: true });
-        return;
-      }
+      setModalState({ ...modalState, walletModal: true });
+      return;
     }
 
     const payload: TransactionPayload = {
