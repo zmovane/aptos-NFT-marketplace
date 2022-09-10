@@ -10,6 +10,7 @@ import {
 
 export default function Mint() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const { account, signAndSubmitTransaction } = useWallet();
   const [base64image, setBase64image] = useState("");
   const [formInput, updateFormInput] = useState<{
@@ -51,6 +52,7 @@ export default function Mint() {
   async function mintNFT() {
     const { collection, name, description, file } = formInput;
     if (!account || !collection || !name || !description || !file) return;
+    setLoading(true);
     try {
       const address = account!.address!.toString();
       const token = await nftStorage.upload(file, name, description);
@@ -60,10 +62,12 @@ export default function Mint() {
       await signAndSubmitTransaction(
         createTokenPayload(collection, name, description, image, address)
       );
-
+      setLoading(false);
       router.push("/dashboard");
     } catch (error) {
       console.log("Error create NFT: ", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -97,7 +101,10 @@ export default function Mint() {
         )}
         <button
           onClick={mintNFT}
-          className="btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+          className={
+            (loading ? "loading " : "") +
+            "btn btn-primary font-bold mt-4  text-white rounded p-4 shadow-lg"
+          }
         >
           Mint NFT
         </button>

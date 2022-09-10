@@ -11,11 +11,13 @@ import { useWallet } from "@manahippo/aptos-wallet-adapter";
 
 export default function MakeOffer() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const { creator, name, collection, uri, description } = router.query;
   const { signAndSubmitTransaction } = useWallet();
   const [price, updatePrice] = useState("");
 
   async function makeOffer() {
+    setLoading(true);
     const payload = {
       type: "entry_function_payload",
       function: `${MARKET_ADDRESS}::marketplace::list_token`,
@@ -31,6 +33,7 @@ export default function MakeOffer() {
       ],
     };
     await signAndSubmitTransaction(payload);
+    setLoading(false);
     router.push("/");
   }
 
@@ -48,7 +51,10 @@ export default function MakeOffer() {
         />
         <button
           onClick={makeOffer}
-          className="btn btn-primary font-bold mt-4 text-white rounded p-4 shadow-lg"
+          className={
+            (loading ? "loading " : "") +
+            "btn btn-primary font-bold mt-4 text-white rounded p-4 shadow-lg"
+          }
         >
           List NFT
         </button>
