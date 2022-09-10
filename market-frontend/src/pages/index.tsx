@@ -11,12 +11,13 @@ import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import { TransactionPayload } from "@martiandao/aptos-web3-bip44.js/dist/generated";
 import { useContext } from "react";
 import { ModalContext } from "../components/ModalContext";
+import { Loading } from "../components/Loading";
 
 export default function Home() {
   const router = useRouter();
   const { account, signAndSubmitTransaction } = useWallet();
   const { modalState, setModalState } = useContext(ModalContext);
-  const { offers, loaded } = useOffers();
+  const { offers, loading } = useOffers();
 
   async function claimOffer(offer: Offer) {
     if (!account) {
@@ -44,7 +45,9 @@ export default function Home() {
     router.push("/dashboard");
   }
 
-  return loaded && !offers.length ? (
+  return loading ? (
+    <Loading />
+  ) : !offers.length ? (
     <h1 className="px-20 py-10 text-3xl">No items in marketplace</h1>
   ) : (
     <div className="p-6" style={{ maxWidth: "1600px" }}>

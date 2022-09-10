@@ -5,10 +5,10 @@ import { walletClient } from "../utils/aptos";
 
 export function useTokens(account: AccountKeys | null): {
   tokens: Token[];
-  loaded: boolean;
+  loading: boolean;
 } {
   const [tokens, setTokens] = useState<Token[]>([]);
-  const [loaded, setLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getTokens = async () => {
       const tokenIds = await walletClient.getTokenIds(
@@ -34,12 +34,12 @@ export function useTokens(account: AccountKeys | null): {
             };
           })
       );
-      setLoaded(true);
+      setLoading(false);
       setTokens(tokens);
     };
     if (account?.address) {
       getTokens();
     }
   }, [account]);
-  return { tokens, loaded };
+  return { tokens, loading };
 }
