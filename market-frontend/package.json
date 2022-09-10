@@ -9,7 +9,7 @@
     "aptos:create-market": "npx node scripts/create_market.mjs"
   },
   "dependencies": {
-    "@manahippo/aptos-wallet-adapter": "^0.3.2",
+    "@manahippo/aptos-wallet-adapter": "^0.3.5",
     "@martiandao/aptos-web3-bip44.js": "^1.1.20",
     "@supabase/supabase-js": "^1.35.6",
     "@types/mime": "^3.0.1",
