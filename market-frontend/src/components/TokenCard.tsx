@@ -6,16 +6,16 @@ type CardProps = { data: Token };
 
 export function TokenCard({ data: token }: CardProps) {
   return (
-    <div className="card card-compact bg-base-100 shadow-xl">
+    <div className="card card-compact bg-base-50 shadow-xl">
       <Image
         className="bg-neutral-200"
         src={token.uri}
         height={500}
         width={500}
-        objectFit="cover"
+        objectFit="contain"
         alt="picture"
       />
-      <div className="card-body">
+      <div className="card-body bg-base-100">
         <h2 className="card-title">{token.name}</h2>
         <p>{token.description}</p>
       </div>
