@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { Offer } from "../types";
+import { TooltipSection } from "./TooltipSection";
 
 type CardProps = { data: Offer; onClick: any };
 export function OfferCard({ data: offer, onClick }: CardProps) {
@@ -16,7 +17,7 @@ export function OfferCard({ data: offer, onClick }: CardProps) {
       />
       <div className="card-body bg-base-100">
         <h2 className="card-title">{offer.token.name}</h2>
-        <p>{offer.token.description}</p>
+        <TooltipSection text={offer.token.description} />
         <div className="justify-start text-pink-400 font-bold">
           {offer.price} APT
         </div>

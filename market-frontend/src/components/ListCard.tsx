@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { Token } from "../types";
+import { TooltipSection } from "./TooltipSection";
 
 type CardProps = { key: string; data: Token; onClick: any };
 export function ListCard({ data: token, onClick }: CardProps) {
@@ -16,7 +17,7 @@ export function ListCard({ data: token, onClick }: CardProps) {
       />
       <div className="card-body bg-base-100">
         <h2 className="card-title">{token.name}</h2>
-        <p>{token.description}</p>
+        <TooltipSection text={token.description} />
         <div className="card-actions justify-end">
           <button
             className="btn btn-primary"

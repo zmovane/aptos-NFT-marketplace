@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { Token } from "../types";
+import { TooltipSection } from "./TooltipSection";
 
 type CardProps = { data: Token };
 
@@ -17,7 +18,7 @@ export function TokenCard({ data: token }: CardProps) {
       />
       <div className="card-body bg-base-100">
         <h2 className="card-title">{token.name}</h2>
-        <p>{token.description}</p>
+        <TooltipSection text={token.description} />
       </div>
     </div>
   );
