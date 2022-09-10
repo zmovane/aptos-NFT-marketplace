@@ -2,7 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.arweave.net",
+      },
+    ],
     domains: [
+      "ipfs.io",
+      "ipfs.filebase.io",
       "ipfs.infura.io",
       "nftstorage.link",
       "aptoslabs.com",

@@ -18,7 +18,7 @@
     "dotenv": "^16.0.1",
     "mime": "^3.0.0",
     "mongodb": "^4.9.0",
-    "next": "latest",
+    "next": "^12.3.1-canary.0",
     "nft.storage": "^7.0.0",
     "react": "18.1.0",
     "react-dom": "18.1.0"
