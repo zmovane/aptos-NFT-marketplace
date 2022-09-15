@@ -71,6 +71,17 @@ module _1200_dollars_per_hour::marketplace{
         account::create_signer_with_capability(&market.signer_cap)
     }
 
+    fun get_royalty_fee_rate(token_id: token::TokenId) : u64{
+        let royalty = token::get_royalty(token_id);
+        let royalty_denominator = token::get_royalty_denominator(&royalty);
+        let royalty_fee_rate = if (royalty_denominator == 0) {
+            0
+        } else {
+            token::get_royalty_numerator(&royalty) / token::get_royalty_denominator(&royalty)
+        };
+        royalty_fee_rate
+    }
+
     public entry fun create_market<CoinType>(sender: &signer, market_name: String, fee_numerator: u64, fee_payee: address, initial_fund: u64) acquires MarketEvents, Market {        
         let sender_addr = signer::address_of(sender);
         let market_id = MarketId { market_name, market_address: sender_addr };
@@ -142,9 +153,10 @@ module _1200_dollars_per_hour::marketplace{
         let resource_signer = get_resource_account_cap(market_address);
         exchange_coin_for_token<CoinType>(buyer, price, signer::address_of(&resource_signer), creator, collection, name, property_version, 1);
         
+        let royalty_fee = price * get_royalty_fee_rate(token_id) ;
         let market = borrow_global<Market>(market_address);
         let market_fee = price * market.fee_numerator / FEE_DENOMINATOR;
-        let amount = price - market_fee;
+        let amount = price - market_fee - royalty_fee;
         coin::transfer<CoinType>(&resource_signer, seller, amount);
         table::remove(&mut offer_store.offers, token_id);
         let market_events = borrow_global_mut<MarketEvents>(market_address);
