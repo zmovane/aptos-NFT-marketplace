@@ -33,7 +33,8 @@ async function main() {
   };
   const transaction = await client.aptosClient.generateTransaction(
     account.address(),
-    payload
+    payload,
+    { gas_unit_price: 100 }
   );
   const tx = await client.signAndSubmitTransaction(account, transaction);
   const result = await client.aptosClient.waitForTransactionWithResult(tx, {
