@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "aptos:create-market": "npx node scripts/create_market.mjs"
+    "aptos:create-market": "npx node scripts/create_market.mjs",
+    "aptos:buy-token": "npx node scripts/buy_token.mjs",
+    "aptos:list-token": "npx node scripts/list_token.mjs"
   },
   "dependencies": {
     "@manahippo/aptos-wallet-adapter": "^0.3.6",
