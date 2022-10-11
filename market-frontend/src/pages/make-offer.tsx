@@ -32,7 +32,7 @@ export default function MakeOffer() {
         price,
       ],
     };
-    await signAndSubmitTransaction(payload);
+    await signAndSubmitTransaction(payload, { gas_unit_price: 100 });
     setLoading(false);
     router.push("/");
   }

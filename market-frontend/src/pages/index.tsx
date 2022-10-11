@@ -41,7 +41,7 @@ export default function Home() {
       ],
     };
 
-    await signAndSubmitTransaction(payload);
+    await signAndSubmitTransaction(payload, { gas_unit_price: 100 });
     router.push("/dashboard");
   }
 

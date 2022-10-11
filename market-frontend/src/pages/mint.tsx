@@ -44,7 +44,8 @@ export default function Mint() {
           collection,
           "_1200_dollars_per_hour",
           "https://github.com/amovane/aptos-NFT-marketplace"
-        )
+        ),
+        { gas_unit_price: 100 }
       );
     }
   }
@@ -60,7 +61,8 @@ export default function Mint() {
 
       await createCollection(address, collection);
       await signAndSubmitTransaction(
-        createTokenPayload(collection, name, description, image, address)
+        createTokenPayload(collection, name, description, image, address),
+        { gas_unit_price: 100 }
       );
       setLoading(false);
       router.push("/dashboard");
