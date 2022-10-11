@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -e
+
+APP_NAME=$1
+ENV_NAME=$2
+
+
+cd `dirname $0`/..
+app_home=`pwd`
+sudo_user=$SUDO_USER
+if [ $sudo_user = "" ]; then
+    sudo_user=$USER
+fi
+
+echo $APP_NAME must be a target of Makefile
+
+cat <<EOF > /etc/systemd/system/$APP_NAME.service
+[Unit]
+Description=$APP_NAME
+ConditionPathExists=$app_home
+
+[Service]
+EnvironmentFile=$app_home/.env
+WorkingDirectory=$app_home
+ExecStart=/usr/bin/env make run
+ExecReload=/bin/kill -HUP \$MAINPID
+Restart=always
+User=$sudo_user
+
+EOF
+
+systemctl daemon-reload
