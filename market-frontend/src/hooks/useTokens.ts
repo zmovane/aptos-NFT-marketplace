@@ -11,14 +11,14 @@ export function useTokens(account: AccountKeys | null): {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getTokens = async () => {
-      const tokenIds = await walletClient.getTokenIds(
+      const data = await walletClient.getTokenIds(
         account!.address!.toString(),
         100,
         0,
         0
       );
       const tokens = await Promise.all(
-        tokenIds
+        data.tokenIds
           .filter((i) => i.difference != 0)
           .map(async (i) => {
             const token = await walletClient.getToken(i.data);
