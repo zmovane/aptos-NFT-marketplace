@@ -144,10 +144,10 @@
     aptos "^1.3.11"
     eventemitter3 "^4.0.7"
 
-"@martiandao/aptos-web3-bip44.js@^1.1.20":
-  version "1.1.20"
-  resolved "https://registry.yarnpkg.com/@martiandao/aptos-web3-bip44.js/-/aptos-web3-bip44.js-1.1.20.tgz#d4b54ee92366b47cb65dd98de24b8d1cff76e11e"
-  integrity sha512-AhHDiPY4fe1Qs59FKjbfHWugxmidMaIE6MPR0pA/eD+nuOP9d/T6Cax491f2FV5imNRVPCXKoPfPbFhFzTTHSw==
+"@martiandao/aptos-web3-bip44.js@^1.1.21":
+  version "1.1.21"
+  resolved "https://registry.yarnpkg.com/@martiandao/aptos-web3-bip44.js/-/aptos-web3-bip44.js-1.1.21.tgz#782fb48cfd4b0974dee7461c30e5a03e2dc19e81"
+  integrity sha512-oOEOrbw+kuB1+ZBxJtSWwWGCu+iGTBAxyFXWp/8FK2sO8tMi4SakNGobOUelmVQneUt4tVNPgwATVKkwtbQZ0g==
   dependencies:
     "@microsoft/eslint-formatter-sarif" "^2.1.7"
     "@scure/bip32" "^1.0.1"
@@ -163,12 +163,13 @@
     tweetnacl "^1.0.3"
     typescript-memoize "^1.1.0"
 
-"@martiandao/aptos-web3-bip44.js@^1.1.21":
-  version "1.1.21"
-  resolved "https://registry.yarnpkg.com/@martiandao/aptos-web3-bip44.js/-/aptos-web3-bip44.js-1.1.21.tgz#782fb48cfd4b0974dee7461c30e5a03e2dc19e81"
-  integrity sha512-oOEOrbw+kuB1+ZBxJtSWwWGCu+iGTBAxyFXWp/8FK2sO8tMi4SakNGobOUelmVQneUt4tVNPgwATVKkwtbQZ0g==
+"@martiandao/aptos-web3-bip44.js@^1.2.10":
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/@martiandao/aptos-web3-bip44.js/-/aptos-web3-bip44.js-1.2.10.tgz#0104f60e8ceb85161ee589717f0defa75435a1a2"
+  integrity sha512-TlpFZqz6caLYomT65+L7QEEEKRBHvYJjTyvKzGDACAqaZSVB1N4W0AsHAoUuYAa8ubdhH5xUUk+pn9helBuX0A==
   dependencies:
     "@microsoft/eslint-formatter-sarif" "^2.1.7"
+    "@noble/hashes" "1.1.2"
     "@scure/bip32" "^1.0.1"
     "@scure/bip39" "^1.0.0"
     axios "^0.26.1"
@@ -176,6 +177,7 @@
     buffer "^6.0.3"
     cross-fetch "^3.1.5"
     ed25519-hd-key "^1.3.0"
+    form-data "4.0.0"
     js-sha3 "^0.8.0"
     node-cache "^5.1.2"
     pre-commit "^1.2.2"
@@ -385,7 +387,7 @@
     "@noble/secp256k1" "~1.6.0"
     "@scure/base" "~1.1.0"
 
-"@scure/bip39@1.1.0", "@scure/bip39@^1.0.0", "@scure/bip39@^1.1.0":
+"@scure/bip39@^1.0.0", "@scure/bip39@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@scure/bip39/-/bip39-1.1.0.tgz#92f11d095bae025f166bef3defcc5bf4945d419a"
   integrity sha512-pwrPOS16VeTKg98dYXQyIjJEcWfz7/1YJIwxUEPFfQPtc86Ym/1sVgQ2RLoD43AazMk2l/unK4ITySSpW2+82w==
@@ -743,17 +745,6 @@ aptos@^1.3.11:
     tweetnacl "^1.0.3"
     typescript-memoize "^1.1.0"
 
-aptos@^1.3.14:
-  version "1.3.14"
-  resolved "https://registry.yarnpkg.com/aptos/-/aptos-1.3.14.tgz#7487b4fd783dd5dfb49419f6e907a95c8ca7ce22"
-  integrity sha512-9AZ7fKgOwLoOITnw3nz2Nzon/HjKrHDU6n893S4MhsmHXK85R4NG4UyTyIczhWGWVdytJiPCkEZufhzsH4eZCw==
-  dependencies:
-    "@noble/hashes" "1.1.2"
-    "@scure/bip39" "1.1.0"
-    axios "0.27.2"
-    form-data "4.0.0"
-    tweetnacl "1.0.3"
-
 arg@^4.1.0:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/arg/-/arg-4.1.3.tgz#269fc7ad5b8e42cb63c896d5666017261c144089"
@@ -806,20 +797,20 @@ available-typed-arrays@^1.0.5:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
-axios@0.27.2, axios@^0.27.2:
-  version "0.27.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
-  integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
-  dependencies:
-    follow-redirects "^1.14.9"
-    form-data "^4.0.0"
-
 axios@^0.26.1:
   version "0.26.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.26.1.tgz#1ede41c51fcf51bbbd6fd43669caaa4f0495aaa9"
   integrity sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==
   dependencies:
     follow-redirects "^1.14.8"
+
+axios@^0.27.2:
+  version "0.27.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
+  integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
+  dependencies:
+    follow-redirects "^1.14.9"
+    form-data "^4.0.0"
 
 balanced-match@^1.0.0:
   version "1.0.2"
