@@ -41,6 +41,8 @@ async function main() {
     checkSuccess: true,
   });
   console.log(result);
+  
+  client.signTransaction
 }
 
 main()

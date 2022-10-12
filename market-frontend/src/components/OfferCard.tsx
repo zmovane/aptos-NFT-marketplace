@@ -19,7 +19,6 @@ export function OfferCard({ data: offer, onClick }: CardProps) {
         <h2 className="card-title">{offer.token.name}</h2>
         <TooltipSection text={offer.token.description} />
         <div
-          className="justify-end text-pink-400 font-bold"
           style={{
             textOverflow: "ellipsis",
             overflow: "hidden",
@@ -27,7 +26,17 @@ export function OfferCard({ data: offer, onClick }: CardProps) {
             maxWidth: "10rem",
           }}
         >
-          {offer.seller}
+          {"creator: " + offer.token.creator}
+        </div>
+        <div
+          style={{
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            display: "inline",
+            maxWidth: "10rem",
+          }}
+        >
+          {"seller: " + offer.seller}
         </div>
         <div className="justify-start text-pink-400 font-bold">
           {offer.price} APT
